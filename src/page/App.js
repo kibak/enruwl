@@ -26,6 +26,13 @@ function App() {
     return null;
   }
 
+  window.addEventListener('keyup', (e) => {
+    switch (e.key) {
+      case "ArrowRight": return next(e);
+      case "ArrowLeft": return prev(e);
+    }
+  });
+
   return (
     <div className="container">
       <div className="stat">
@@ -33,8 +40,8 @@ function App() {
         [ {currIdx + 1} / {data.length} ]
         <a href="#" onClick={next}>next</a>
       </div>
-      {Object.entries(words).map(([word, desc]) => {
-        return <div className="word">
+      {Object.entries(words).map(([word, desc], i) => {
+        return <div className="word" key={i}>
           <p>
             <b className="title">{word}</b>
             <a
