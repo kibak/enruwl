@@ -9,6 +9,7 @@ function App() {
 
   const [currIdx, setCurrIdx] = useState(initIdx);
   const [words, setWords] = useState(data[initIdx]);
+  const [showDeeperLink, setShowDeeperLink] = useState(null);
 
   useEffect(() => {
     setWords(data[currIdx]);
@@ -17,12 +18,28 @@ function App() {
 
   function prev(e) {
     e.preventDefault();
+    setShowDeeperLink(null);
     if (currIdx > 0) setCurrIdx(currIdx - 1);
     return null;
   }
+
   function next(e) {
     e.preventDefault();
+    setShowDeeperLink(null);
     if (currIdx < data.length) setCurrIdx(currIdx + 1);
+    return null;
+  }
+
+  function showDeeper(e, word) {
+    e.preventDefault();
+    if (! showDeeperLink)
+      setShowDeeperLink("https://www.merriam-webster.com/dictionary/" + word);
+    return null;
+  }
+
+  function hideDeeper(e) {
+    e.preventDefault();
+    if (showDeeperLink) setShowDeeperLink(null);
     return null;
   }
 
@@ -40,21 +57,22 @@ function App() {
         [ {currIdx + 1} / {data.length} ]
         <a href="#" onClick={next}>next</a>
       </div>
-      {Object.entries(words).map(([word, desc], i) => {
-        return <div className="word" key={i}>
-          <p>
-            <b className="title">{word}</b>
-            <a
-                href={"https://www.merriam-webster.com/dictionary/" + word}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-              learn deeper >>
-            </a>
-          </p>
-          <p dangerouslySetInnerHTML={{ __html: desc }}></p>
+      {showDeeperLink ? (
+        <div className="iframe">
+          <a href="#" className="close-btn" onClick={hideDeeper}>close</a>
+          <iframe src={showDeeperLink}></iframe>
         </div>
-      })}
+      ) : (<div>
+        {Object.entries(words).map(([word, desc], i) => {
+          return <div className="word" key={i}>
+            <p>
+              <b className="title">{word}</b>
+              <a href="#" onClick={(event => showDeeper(event, word))}>learn deeper >></a>
+            </p>
+            <p dangerouslySetInnerHTML={{ __html: desc }}></p>
+          </div>
+        })}
+      </div>)}
     </div>
   );
 }
