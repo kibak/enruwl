@@ -13,6 +13,11 @@ code {
   monospace;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #61dafb;
+  opacity: 1; /* Firefox */
+}
+
 .stat {
   position: fixed;
   top: 0;
@@ -31,6 +36,20 @@ code {
 a {
   color: #61dafb;
   text-decoration: none;
+}
+
+input, input:hover, input:focus, input:focus-visible {
+  background-color: #282c34;
+  color: white;
+  border: 1px solid #61dafb;
+  font-size: calc(10px + 2vmin);
+  padding: 6px;
+  box-shadow: none;
+  outline: none;
+}
+
+.hidden-word {
+  color: #61dafb;
 }
 
 .container {
