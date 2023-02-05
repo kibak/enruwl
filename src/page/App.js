@@ -14,8 +14,8 @@ function App() {
   const [words, setWords] = useState(data[initIdx]);
   const [showDeeperLink, setShowDeeperLink] = useState(null);
   const [isTestMode, setIsTestMode] = useState(initIsTestMode);
-  const [wordInput, setWordInput] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [wordInput, setWordInput] = useState({});
+  const [isSuccess, setIsSuccess] = useState({});
 
   function prev(e) {
     e.preventDefault();
@@ -61,15 +61,14 @@ function App() {
     if (word.toLowerCase().split(" ")
         .map(v => v.trim().replace(/[^a-z]/g, ""))
         .includes(val.toLowerCase().trim().replace(/[^a-z]/g, ""))) {
-      setIsSuccess(true);
-    } else {
-      setWordInput(val);
+      setIsSuccess(Object.assign(isSuccess, { [word]: true }));
     }
+    setWordInput({ ...wordInput, [word]: val });
   }
 
   useEffect(() => {
-    if (isSuccess) setIsSuccess(false);
-    if (wordInput) setWordInput("");
+    if (isSuccess) setIsSuccess({});
+    if (wordInput) setWordInput({});
     if (showDeeperLink) setShowDeeperLink(null);
     setWords(data[currIdx]);
     localStorage.setItem('currIdx', JSON.stringify(currIdx));
@@ -104,14 +103,14 @@ function App() {
       ) : (<div>
         {Object.entries(words).map(([word, desc], i) => {
           return <div className="word" key={i}>
-            {! isTestMode || isSuccess ? <p>
+            {! isTestMode || isSuccess[word] ? <p>
               <b className="title">{word}</b>
               <a href="/" onClick={(event => showDeeper(event, word))}>learn deeper >></a>
             </p> : <p>
               <br/>
-              <input placeholder={"what's the word?"} value={wordInput} onChange={e => validateWord(e, word)}/>
+              <input placeholder={"what's the word?"} value={wordInput[word]} onChange={e => validateWord(e, word)}/>
             </p>}
-            <p dangerouslySetInnerHTML={{ __html: isTestMode && !isSuccess ? maskWord(word, desc) : desc }}></p>
+            <p dangerouslySetInnerHTML={{ __html: isTestMode && !isSuccess[word] ? maskWord(word, desc) : desc }}></p>
           </div>
         })}
       </div>)}
