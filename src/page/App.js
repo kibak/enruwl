@@ -58,7 +58,9 @@ function App() {
   function validateWord(e, word) {
     e.preventDefault();
     const val = e.target.value;
-    if (val.toLowerCase() === word.toLowerCase()) {
+    if (word.toLowerCase().split(" ")
+        .map(v => v.trim().replace(/[^a-z]/g, ""))
+        .includes(val.toLowerCase().trim().replace(/[^a-z]/g, ""))) {
       setIsSuccess(true);
     } else {
       setWordInput(val);
