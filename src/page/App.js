@@ -108,7 +108,7 @@ function App() {
               <a href="/" onClick={(event => showDeeper(event, word))}>learn deeper >></a>
             </p> : <p>
               <br/>
-              <input placeholder={"what's the word?"} value={wordInput[word]} onChange={e => validateWord(e, word)}/>
+              <input placeholder={"what's the word?"} value={wordInput[word] || ""} onChange={e => validateWord(e, word)}/>
             </p>}
             <p dangerouslySetInnerHTML={{ __html: isTestMode && !isSuccess[word] ? maskWord(word, desc) : desc }}></p>
           </div>
